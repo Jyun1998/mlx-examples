@@ -14,8 +14,6 @@ from tree_utils import tree_flatten
 """
 Some TODOs for this model:
     - Positional encodings
-    - Dropout
-    - Adam optimizer
     - Option for bigger datasets (wikitext / librispeech text < c4 < ...)
 """
 

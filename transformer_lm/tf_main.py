@@ -111,10 +111,12 @@ class TransformerLM(tf.keras.Model):
             ]
         )
         self.projection = tf.keras.layers.Dense(vocab_size)
-
+        self.dropout = tf.keras.layers.Dropout(0.1)
+        
     def call(self, x):
         x = self.embedding(x)
         x = self.transformer(x)
+        x = self.dropout(x)
         x = self.projection(x)
         return x
 
@@ -134,7 +136,7 @@ def main(args, device):
             len(vocab), args.num_blocks, args.num_heads, args.dim, context_size
         )
         transformer.compile(
-            optimizer=tf.keras.optimizers.legacy.SGD(learning_rate=args.learning_rate),
+            optimizer=tf.keras.optimizers.Adam(learning_rate=args.learning_rate),
             loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
         )
         transformer.build((batch_size, context_size))

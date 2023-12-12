@@ -60,11 +60,13 @@ class TransformerLM(torch.nn.Module):
             num_layers,
         )
         self.projection = torch.nn.Linear(model_dims, vocab_size)
+        self.dropout = torch.nn.Dropout(0.1)
 
     def forward(self, x):
         mask = create_additive_causal_mask(x.shape[1], device=x.device)
         x = self.embedding(x)
         x = self.transformer(x, mask=mask)
+        x = self.dropout(x)
         x = self.projection(x)
         return x
 

@@ -20,11 +20,13 @@ class TransformerLM(nn.Module):
         self.embedding = nn.Embedding(vocab_size, dims)
         self.transformer = nn.TransformerEncoder(num_layers, dims, num_heads)
         self.out_proj = nn.Linear(dims, vocab_size)
-
+        self.dropout = nn.Dropout(0.1)
+        
     def __call__(self, x):
         mask = nn.MultiHeadAttention.create_additive_causal_mask(x.shape[1])
         x = self.embedding(x)
         x = self.transformer(x, mask)
+        x = self.dropout(x)
         return self.out_proj(x)
 
     def loss(self, x, y, reduce=True):
@@ -78,7 +80,7 @@ def main(args):
     )
     print(f"Training a transformer with {nparams / 1024**2:.3f} M parameters")
 
-    optimizer = optim.SGD(learning_rate=args.learning_rate)
+    optimizer = optim.Adam(learning_rate=args.learning_rate)
     loss_and_grad_fn = nn.value_and_grad(model, model.loss)
 
     def eval_fn(model, dataset):
