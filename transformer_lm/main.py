@@ -168,7 +168,7 @@ if __name__ == "__main__":
         "--num_iters", type=int, default=100000, help="Iterations to train for."
     )
     parser.add_argument(
-        "--learning_rate", type=float, default=1e-3, help="SGD learning rate."
+        "--learning_rate", type=float, default=1e-3, help="Adam learning rate."
     )
     parser.add_argument(
         "--steps_per_report",

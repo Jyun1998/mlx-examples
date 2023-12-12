@@ -83,7 +83,7 @@ def main(args, device):
     # Initialize model:
     transformer = TransformerLM(len(vocab), args.num_blocks, args.num_heads, args.dim)
     transformer = transformer.to(device)
-    optim = torch.optim.SGD(transformer.parameters(), lr=args.learning_rate, momentum=0)
+    optim = torch.optim.Adam(transformer.parameters(), lr=args.learning_rate)
     nparams = sum(
         p.numel() for n, p in transformer.named_parameters() if "embedding" not in n
     )
@@ -178,7 +178,7 @@ if __name__ == "__main__":
         "--num_iters", type=int, default=100000, help="Iterations to train for."
     )
     parser.add_argument(
-        "--learning_rate", type=float, default=1e-3, help="SGD learning rate."
+        "--learning_rate", type=float, default=1e-3, help="Adam learning rate."
     )
     parser.add_argument(
         "--steps_per_report",
